@@ -1,8 +1,8 @@
 package main
 
 import (
-	"api-gateway/pkg/config"
-	"api-gateway/pkg/di"
+	"auth-service/pkg/config"
+	"auth-service/pkg/di"
 	"log"
 )
 
@@ -18,5 +18,7 @@ func main() {
 		log.Fatalf("failed to initialize api: %v", err)
 	}
 
-	srv.Start()
+	if err = srv.Start(); err != nil {
+		log.Fatalf("failed to start server: %v", err)
+	}
 }

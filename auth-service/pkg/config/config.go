@@ -1,30 +1,27 @@
 package config
 
 import (
-	"time"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	ApiPort string `mapstructure:"API_PORT"`
-
-	StreamServiceHost string `mapstructure:"STUDENT_SERVICE_HOST"`
-	StreamServicePort string `mapstructure:"STUDENT_SERVICE_PORT"`
-
 	AuthServiceHost string `mapstructure:"AUTH_SERVICE_HOST"`
 	AuthServicePort string `mapstructure:"AUTH_SERVICE_PORT"`
 
-	WriteTimeout    time.Duration
-	ReadTimeout     time.Duration
-	GraceFulTimeout time.Duration
+	DBHost     string `mapstructure:"DB_HOST"`
+	DBPort     string `mapstructure:"DB_PORT"`
+	DBName     string `mapstructure:"DB_NAME"`
+	DBUser     string `mapstructure:"DB_USER"`
+	DBPassword string `mapstructure:"DB_PASSWORD"`
+
+	JwtKey string `mapstructure:"JWT_KEY"`
 }
 
 var envs = []string{
-	"API_PORT",
-	"STUDENT_SERVICE_HOST", "STUDENT_SERVICE_PORT",
 	"AUTH_SERVICE_HOST", "AUTH_SERVICE_PORT",
+	"DB_HOST", "DB_PORT", "DB_NAME", "DB_USER", "DB_PASSWORD",
+	"JWT_KEY",
 }
 
 func LoadConfig() (Config, error) {
