@@ -112,3 +112,36 @@ func (a *authServiceServer) SignIn(ctx context.Context, req *pb.SignInRequest) (
 	}, nil
 
 }
+
+func (a *authServiceServer) VerifyAccessToken(ctx context.Context, req *pb.VerifyAccessTokenRequest) (*pb.VerifyAccessTokenResponse, error) {
+
+	payload, err := a.authUseCase.VerifyAccessToken(req.GetAccessToken())
+
+	if err != nil {
+
+		var (
+			statusCode codes.Code
+			message    string
+		)
+		// check error and according to the error set status code and message
+		switch {
+		case errors.Is(err, usecase.ErrExpired):
+			statusCode = codes.Unauthenticated
+			message = "token expired"
+		case errors.Is(err, usecase.ErrInvalid):
+			statusCode = codes.Unauthenticated
+			message = "invalid token"
+		default:
+			statusCode = codes.Internal
+			message = "internal server error"
+		}
+		return nil, status.Error(statusCode, message)
+	}
+
+	return &pb.VerifyAccessTokenResponse{
+		TokenId: payload.TokenID,
+		UserId:  payload.UserID,
+		Email:   payload.Email,
+		Role:    payload.Role,
+	}, nil
+}

@@ -9,6 +9,7 @@ package di
 import (
 	"api-gateway/pkg/api"
 	"api-gateway/pkg/api/handler"
+	"api-gateway/pkg/api/middleware"
 	"api-gateway/pkg/api/routes"
 	"api-gateway/pkg/client"
 	"api-gateway/pkg/config"
@@ -17,13 +18,14 @@ import (
 // Injectors from wire.go:
 
 func InitializeAPI(cfg config.Config) (*api.Server, error) {
-	studentHandler := handler.NewStudentHandler()
 	authServiceClient, err := client.NewAuthServiceClient(cfg)
 	if err != nil {
 		return nil, err
 	}
+	interfacesMiddleware := middleware.NewMiddleware(authServiceClient)
+	studentHandler := handler.NewStudentHandler()
 	authHandler := handler.NewAuthHandler(authServiceClient)
-	httpHandler := routes.NewGinRouter(studentHandler, authHandler)
+	httpHandler := routes.NewGinRouter(interfacesMiddleware, studentHandler, authHandler)
 	server := api.NewServerHTTP(cfg, httpHandler)
 	return server, nil
 }

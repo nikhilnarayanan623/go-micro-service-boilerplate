@@ -28,7 +28,7 @@ var (
 )
 
 type jwtClaims struct {
-	UserID    uint
+	UserID    string
 	Email     string
 	TokenID   string
 	ExpiresAt time.Time

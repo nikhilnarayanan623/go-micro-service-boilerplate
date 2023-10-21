@@ -6,6 +6,7 @@ package di
 import (
 	"api-gateway/pkg/api"
 	"api-gateway/pkg/api/handler"
+	"api-gateway/pkg/api/middleware"
 	"api-gateway/pkg/api/routes"
 	"api-gateway/pkg/client"
 	"api-gateway/pkg/config"
@@ -16,13 +17,16 @@ import (
 func InitializeAPI(cfg config.Config) (*api.Server, error) {
 
 	wire.Build(
+
 		client.NewAuthServiceClient,
+
 		handler.NewAuthHandler,
 
 		handler.NewStudentHandler,
 
-		routes.NewGinRouter,
+		middleware.NewMiddleware,
 
+		routes.NewGinRouter,
 		api.NewServerHTTP,
 	)
 

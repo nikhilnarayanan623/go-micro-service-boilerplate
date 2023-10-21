@@ -1,16 +1,19 @@
 package routes
 
 import (
-	"api-gateway/pkg/api/handler/interfaces"
-	handlerInterface "api-gateway/pkg/api/handler/interfaces"
+	handlerInterfaces "api-gateway/pkg/api/handler/interfaces"
+	middlewareInterfaces "api-gateway/pkg/api/middleware/interfaces"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func NewGinRouter(
-	studentHandler interfaces.StudentHandler,
-	authHandler handlerInterface.AuthHandler,
+	middleware middlewareInterfaces.Middleware,
+	studentHandler handlerInterfaces.StudentHandler,
+	authHandler handlerInterfaces.AuthHandler,
+
 ) http.Handler {
 
 	router := gin.New()

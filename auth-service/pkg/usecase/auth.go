@@ -9,6 +9,7 @@ import (
 	"auth-service/pkg/utils"
 	"errors"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -20,6 +21,9 @@ var (
 	ErrAlreadyExist  = errors.New("resource already exist")
 	ErrNotExist      = errors.New("resource not exist")
 	ErrWrongPassword = errors.New("wrong password")
+
+	ErrExpired = errors.New("resource got expired")
+	ErrInvalid = errors.New("invalid resource")
 )
 
 type authUseCase struct {
@@ -103,7 +107,7 @@ func (a *authUseCase) GenerateAccessToken(role string, user domain.User) (respon
 	// create token payload with user details and role
 	payload := token.Payload{
 		TokenID:  tokenID,
-		UserID:   user.ID,
+		UserID:   user.ID26,
 		Email:    user.Email,
 		Role:     role,
 		ExpireAt: expireAt,
@@ -121,4 +125,31 @@ func (a *authUseCase) GenerateAccessToken(role string, user domain.User) (respon
 		AccessToken:         token,
 		AccessTokenExpireAt: expireAt,
 	}, nil
+}
+
+func (a *authUseCase) VerifyAccessToken(tokenString string) (token.Payload, error) {
+
+	payload, err := a.tokenAuth.VerifyToken(tokenString)
+
+	if err != nil {
+		log.Println(err)
+		// check the error and return new error according the token error
+		switch err {
+		case token.ErrExpiredToken:
+			return token.Payload{}, ErrExpired
+		case token.ErrInvalidToken:
+			return token.Payload{}, ErrInvalid
+		default:
+			return token.Payload{}, fmt.Errorf("failed to verify token: %w", err)
+		}
+	}
+
+
+
+
+
+
+
+	
+	return payload, nil
 }

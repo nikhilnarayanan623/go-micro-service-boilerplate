@@ -11,7 +11,7 @@ type TokenAuth interface {
 
 type Payload struct {
 	TokenID  string
-	UserID   uint
+	UserID   string
 	Email    string
 	Role     string
 	ExpireAt time.Time

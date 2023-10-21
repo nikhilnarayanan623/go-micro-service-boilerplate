@@ -5,7 +5,8 @@ import (
 	"api-gateway/pkg/api/handler/response"
 	"api-gateway/pkg/client/interfaces"
 	"api-gateway/pkg/config"
-	"auth-service/pkg/pb"
+	"api-gateway/pkg/models"
+	"api-gateway/pkg/pb"
 	"context"
 	"fmt"
 
@@ -76,5 +77,28 @@ func (a *authServiceClient) SignIn(ctx context.Context, signInDetails request.Si
 
 	return response.SignIn{
 		AccessToken: res.GetAccessToken(),
+	}, nil
+}
+
+func (a *authServiceClient) VerifyAccessToken(ctx context.Context, accessToken string) (models.TokenPayload, error) {
+
+	// create verify token request
+	req := &pb.VerifyAccessTokenRequest{
+		AccessToken: accessToken,
+	}
+
+	res, err := a.client.VerifyAccessToken(ctx, req)
+
+	// if any error return the simply return the error and handle on handler
+	if err != nil {
+		return models.TokenPayload{}, err
+	}
+
+	return models.TokenPayload{
+		TokenID: res.GetTokenId(),
+		UserID:  res.GetUserId(),
+		Email:   res.GetEmail(),
+		Role:    res.GetRole(),
+		// expire at
 	}, nil
 }

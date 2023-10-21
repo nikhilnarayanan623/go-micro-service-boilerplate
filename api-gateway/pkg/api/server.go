@@ -21,7 +21,7 @@ type Server struct {
 // To create a new server with HTTP
 func NewServerHTTP(cfg config.Config, router http.Handler) *Server {
 
-	// once get idea to read time from env, this will remove
+	// once found how to read value of time from env, this will be remove
 	{
 		cfg.ReadTimeout = time.Second * 15
 		cfg.WriteTimeout = time.Second * 15
