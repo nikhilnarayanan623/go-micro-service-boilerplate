@@ -68,4 +68,45 @@ func (a *authHandler) SignUp(ctx *gin.Context) {
 
 func (a *authHandler) SignIn(ctx *gin.Context) {
 
+	// create request body which have binding validation tags
+	var body request.SignIn
+
+	// use gin binding which will also check the validation and return error if any.
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+
+		response := response.ErrorResponse(http.StatusBadRequest, BindErrorMessage, err, body)
+		ctx.JSON(http.StatusBadRequest, response)
+
+		return
+	}
+
+	// call the client to do the sign in
+	res, err := a.client.SignIn(ctx, body)
+
+	if err != nil {
+		// log the error
+		log.Println(err)
+
+		// get the status code from the error
+		statusCode := utils.GetHTTPStatusCodeFromGRPCError(err)
+		var message string
+
+		// crate a message according to the status code
+		switch statusCode {
+		case http.StatusNotFound:
+			message = "user not found with given details"
+		case http.StatusUnauthorized:
+			message = "user password doesn't match"
+		default:
+			message = "internal server error"
+		}
+
+		response := response.ErrorResponse(statusCode, message, err, nil)
+		ctx.JSON(statusCode, response)
+		return
+	}
+
+	response := response.SuccessResponse(http.StatusCreated, "successfully sign in completed", res)
+
+	ctx.JSON(http.StatusCreated, response)
 }

@@ -8,4 +8,5 @@ import (
 
 type AuthServiceClient interface {
 	SignUp(ctx context.Context, signUpDetails request.SignUp) (response.SignUp, error)
+	SignIn(ctx context.Context, signInDetails request.SignIn) (response.SignIn, error)
 }

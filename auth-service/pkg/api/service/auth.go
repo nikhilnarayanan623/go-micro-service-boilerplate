@@ -13,6 +13,10 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+const (
+	RoleUser = "user"
+)
+
 type authServiceServer struct {
 	authUseCase interfaces.AuthUseCase
 
@@ -44,7 +48,7 @@ func (a *authServiceServer) SignUp(ctx context.Context, req *pb.SignUpRequest) (
 			statusCode codes.Code
 			message    string
 		)
-		// check the error and according to the error set status code and message
+		// check the error, and according to the error set status code and message
 		switch {
 		case errors.Is(err, usecase.ErrAlreadyExist):
 			statusCode = codes.AlreadyExists
@@ -59,4 +63,52 @@ func (a *authServiceServer) SignUp(ctx context.Context, req *pb.SignUpRequest) (
 	return &pb.SignUpResponse{
 		UserId: user.ID26,
 	}, nil
+}
+
+func (a *authServiceServer) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.SignInResponse, error) {
+
+	user := domain.User{
+		Email:    req.GetEmail(),
+		Password: req.GetPassword(),
+	}
+
+	user, err := a.authUseCase.SignIn(user)
+
+	if err != nil {
+		// log the error
+		log.Println(err)
+
+		var (
+			statusCode codes.Code
+			message    string
+		)
+		// check the error, and according to the error set status code and message
+		switch {
+		case errors.Is(err, usecase.ErrNotExist):
+			statusCode = codes.NotFound
+			message = "user not exist with given details"
+		case errors.Is(err, usecase.ErrWrongPassword):
+			statusCode = codes.Unauthenticated
+			message = "wrong user password"
+		default:
+			statusCode = codes.Internal
+			message = "internal server error"
+		}
+		return nil, status.Error(statusCode, message)
+	}
+
+	// generate access token for the user
+	tokenRes, err := a.authUseCase.GenerateAccessToken(RoleUser, user)
+
+	if err != nil {
+		// log the error
+		log.Println(err)
+
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+
+	return &pb.SignInResponse{
+		AccessToken: tokenRes.AccessToken,
+	}, nil
+
 }

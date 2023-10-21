@@ -59,3 +59,22 @@ func (a *authServiceClient) SignUp(ctx context.Context, signUpDetails request.Si
 		UserID: res.GetUserId(),
 	}, nil
 }
+
+func (a *authServiceClient) SignIn(ctx context.Context, signInDetails request.SignIn) (response.SignIn, error) {
+
+	// create a sign in request
+	req := &pb.SignInRequest{
+		Email:    signInDetails.Email,
+		Password: signInDetails.Password,
+	}
+
+	res, err := a.client.SignIn(ctx, req)
+
+	if err != nil {
+		return response.SignIn{}, err
+	}
+
+	return response.SignIn{
+		AccessToken: res.GetAccessToken(),
+	}, nil
+}
