@@ -8,7 +8,6 @@ require (
 	github.com/golang/mock v1.4.4
 	github.com/google/uuid v1.3.1
 	github.com/google/wire v0.5.0
-	github.com/sagikazarmark/crypt v0.15.0
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/crypto v0.13.0

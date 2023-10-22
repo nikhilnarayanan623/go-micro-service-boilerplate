@@ -13,38 +13,27 @@ ${BINARY_DIR}:
 	mkdir -p $(BINARY_DIR)
 
 build: ${BINARY_DIR} ## Compile the code, build Executable File
-	$(GOCMD) build -o $(BINARY_DIR) -v ./cmd/api
-	
-build-run: build
-	./$(BINARY_DIR)/api
+	$(GOCMD) build -o $(BINARY_DIR)/api-gateway -v ./api-gateway/cmd/api
+	$(GOCMD) build -o $(BINARY_DIR)/auth-service -v ./auth-service/cmd/api
+	$(GOCMD) build -o $(BINARY_DIR)/employee-service -v ./employee-service/cmd/api
 
-run: ## Start application
-	$(GOCMD) run ./cmd/api
+build-api-gateway: ${BINARY_DIR} ## Compile the code, build Executable File For API Gateway Service
+	$(GOCMD) build -o $(BINARY_DIR)/api-gateway -v ./api-gateway/cmd/api
 
-test: ## Run tests
-	$(GOCMD) test ./... -cover
+build-auth-service: ${BINARY_DIR} ## Compile the code, build Executable File For Auth Service
+	$(GOCMD) build -o $(BINARY_DIR)/auth-service -v ./auth-service/cmd/api
 
-test-coverage: ## Run tests and generate coverage file
-	$(GOCMD) test ./... -coverprofile=$(CODE_COVERAGE).out
-	$(GOCMD) tool cover -html=$(CODE_COVERAGE).out
+build-employee-service: ${BINARY_DIR} ## Compile the code, build Executable File For Employee Service
+	$(GOCMD) build -o $(BINARY_DIR)/employee-service -v ./employee-service/cmd/api
 
-deps: ## Install dependencies
-	# go get $(go list -f '{{if not (or .Main .Indirect)}}{{.Path}}{{end}}' -m all)
-	$(GOCMD) get -u -t -d -v ./...
-	$(GOCMD) mod tidy
-	$(GOCMD) mod vendor
+run-api-gateway: build-api-gateway ## Start API Gateway
+	./$(BINARY_DIR)/api-gateway
 
-deps-cleancache: ## Clear cache in Go module
-	$(GOCMD) clean -modcache
+run-auth-service: build-auth-service ## Start Auth Service
+	./$(BINARY_DIR)/auth-service
 
-wire: ## Generate wire_gen.go
-	cd pkg/di && wire
-
-proto: ## To generate go files from proto
-	protoc --go_out=. --go-grpc_out=. ./pkg/proto/*.proto
-
-swag: ## Generate swagger docs
-	swag init -g pkg/api/server.go -o ./cmd/api/docs
+run-employee-service: build-employee-service ## Start Employee Service
+	./$(BINARY_DIR)/employee-service
 
 help: ## Display this help screen
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

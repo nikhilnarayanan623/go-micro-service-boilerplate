@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package="./pkg/pb";
+
+service EmployeeService{
+    rpc Create( CreateRequest) returns(stream Employee){};
+}
+
+message CreateRequest {
+    int32 count = 1;
+}
+
+message Employee {
+    string id = 1;
+    string name = 2;
+    int32 age = 3;
+    string email = 4;
+    string role = 5;
+}

@@ -19,10 +19,10 @@ func InitializeAPI(cfg config.Config) (*api.Server, error) {
 	wire.Build(
 
 		client.NewAuthServiceClient,
+		client.NewEmployeeServiceClient,
 
 		handler.NewAuthHandler,
-
-		handler.NewStudentHandler,
+		handler.NewEmployeeHandler,
 
 		middleware.NewMiddleware,
 

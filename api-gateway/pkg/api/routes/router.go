@@ -11,8 +11,8 @@ import (
 
 func NewGinRouter(
 	middleware middlewareInterfaces.Middleware,
-	studentHandler handlerInterfaces.StudentHandler,
 	authHandler handlerInterfaces.AuthHandler,
+	employeeHandler handlerInterfaces.EmployeeHandler,
 
 ) http.Handler {
 
@@ -29,11 +29,14 @@ func NewGinRouter(
 		RegisterAuthRoutes(auth, authHandler)
 	}
 
-	// student := api.Group("/student")
+	// from here onward all the api should be under the authenticate middleware
+	api.Use(middleware.Authenticate("user"))
+
+	// group employee routes
+	employees := api.Group("/employees")
 	{
-		// group student routes
-		// register student handler with student routes
-		// RegisterStudentRoutes(student, studentHandler)
+		// register employees handler with employees routes
+		RegisterEmployeeRoutes(employees, middleware, employeeHandler)
 	}
 
 	return router

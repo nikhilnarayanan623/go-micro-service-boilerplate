@@ -23,9 +23,13 @@ func InitializeAPI(cfg config.Config) (*api.Server, error) {
 		return nil, err
 	}
 	interfacesMiddleware := middleware.NewMiddleware(authServiceClient)
-	studentHandler := handler.NewStudentHandler()
 	authHandler := handler.NewAuthHandler(authServiceClient)
-	httpHandler := routes.NewGinRouter(interfacesMiddleware, studentHandler, authHandler)
+	employeeServiceClient, err := client.NewEmployeeServiceClient(cfg)
+	if err != nil {
+		return nil, err
+	}
+	employeeHandler := handler.NewEmployeeHandler(employeeServiceClient)
+	httpHandler := routes.NewGinRouter(interfacesMiddleware, authHandler, employeeHandler)
 	server := api.NewServerHTTP(cfg, httpHandler)
 	return server, nil
 }

@@ -1,8 +1,8 @@
 package api
 
 import (
-	"auth-service/pkg/config"
-	"auth-service/pkg/pb"
+	"employee-service/pkg/config"
+	"employee-service/pkg/pb"
 	"fmt"
 	"log"
 	"net"
@@ -16,9 +16,9 @@ type Server struct {
 	port string
 }
 
-func NewServerGRPC(cfg config.Config, srv pb.AuthServiceServer) (*Server, error) {
+func NewServerGRPC(cfg config.Config, srv pb.EmployeeServiceServer) (*Server, error) {
 
-	addr := fmt.Sprintf("%s:%s", cfg.AuthServiceHost, cfg.AuthServicePort)
+	addr := fmt.Sprintf("%s:%s", cfg.EmployeeServiceHost, cfg.EmployeeServicePort)
 
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
@@ -27,16 +27,16 @@ func NewServerGRPC(cfg config.Config, srv pb.AuthServiceServer) (*Server, error)
 
 	gsr := grpc.NewServer()
 
-	pb.RegisterAuthServiceServer(gsr, srv)
+	pb.RegisterEmployeeServiceServer(gsr, srv)
 
 	return &Server{
 		lis:  lis,
 		gsr:  gsr,
-		port: cfg.AuthServicePort,
+		port: cfg.EmployeeServicePort,
 	}, err
 }
 
 func (c *Server) Start() error {
-	log.Println("Auth service listening on port: ", c.port)
+	log.Println("Employee service listening on port: ", c.port)
 	return c.gsr.Serve(c.lis)
 }

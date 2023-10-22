@@ -4,6 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type StudentHandler interface {
+type EmployeeHandler interface {
 	Create(ctx *gin.Context)
 }
