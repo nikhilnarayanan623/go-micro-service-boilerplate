@@ -5,7 +5,6 @@ import (
 	"employee-service/pkg/domain"
 	"employee-service/pkg/service/random"
 	"employee-service/pkg/usecase/interfaces"
-	"fmt"
 )
 
 type employeeUseCase struct {
@@ -38,7 +37,6 @@ func (e *employeeUseCase) Create(ctx context.Context, count int, employeeChan ch
 		case <-ctx.Done(): // check the context done for exit
 			return
 		default:
-			fmt.Println("sending emp...")
 			employeeChan <- emp
 		}
 	}
