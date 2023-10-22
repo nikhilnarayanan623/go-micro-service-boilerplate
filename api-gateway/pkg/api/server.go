@@ -19,6 +19,15 @@ type Server struct {
 }
 
 // To create a new server with HTTP
+// @title Go Microservices BoilerPlate
+// @description BoilerPlate for micro services with GRPC
+//
+// @BasePath					/api/v1
+// @SecurityDefinitions.apikey	BearerAuth
+// @Name						Authorization
+// @In							header
+// @Description				Add prefix of Bearer before  token Ex: "Bearer token"
+// @Query.collection.format	multi
 func NewServerHTTP(cfg config.Config, router http.Handler) *Server {
 
 	// once found how to read value of time from env, this will be remove

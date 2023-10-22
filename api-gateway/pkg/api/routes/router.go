@@ -1,10 +1,13 @@
 package routes
 
 import (
+	_ "api-gateway/cmd/api/docs"
 	handlerInterfaces "api-gateway/pkg/api/handler/interfaces"
 	middlewareInterfaces "api-gateway/pkg/api/middleware/interfaces"
-
 	"net/http"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,6 +22,9 @@ func NewGinRouter(
 	router := gin.New()
 
 	router.Use(gin.Logger())
+
+	// swagger docs
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// group with api version
 	api := router.Group("/api/v1")

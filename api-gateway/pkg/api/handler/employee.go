@@ -20,6 +20,15 @@ func NewEmployeeHandler(client clientInterfaces.EmployeeServiceClient) interface
 	}
 }
 
+// @Summary		Create Employees
+// @Description	API for User To Create Random Employees Details
+// @Security		BearerAuth
+// @Id				Create Employees
+// @Tags			Employees
+// @Param			inputs	body	request.Employee{}	true	"Create Employees Details"
+// @Router			/employees [post]
+// @Success		200	{object}	response.Response{data=[]response.Employee}	"Successfully Employees Created"
+// @Failure		500	{object}	response.Response{}							"Internal Server Error"
 func (s *employeeHandler) Create(ctx *gin.Context) {
 
 	var body request.Employee

@@ -23,6 +23,16 @@ func NewAuthHandler(client clientInterfaces.AuthServiceClient) interfaces.AuthHa
 	}
 }
 
+// @Summary		User Sign Up
+// @Description	API For User To Sign Up
+// @Id				User SignUp
+// @Tags			Authentication
+// @Param			inputs	body	request.SignUp{}	true	"Sign Up Details"
+// @Router			/auth/sign-up [post]
+// @Success		200	{object}	response.Response{data=response.SignUp}	"Successfully Sign Up Completed"
+// @Failure		400	{object}	response.Response{}						"Invalid Inputs"
+// @Failure		409	{object}	response.Response{}						"User Already Exist"
+// @Failure		500	{object}	response.Response{}						"Internal Server Error"
 func (a *authHandler) SignUp(ctx *gin.Context) {
 
 	// create request body which have binding validation tags
@@ -61,11 +71,21 @@ func (a *authHandler) SignUp(ctx *gin.Context) {
 		return
 	}
 
-	response := response.SuccessResponse(http.StatusCreated, "successfully sign up completed", res)
+	response := response.SuccessResponse(http.StatusOK, "successfully sign up completed", res)
 
-	ctx.JSON(http.StatusCreated, response)
+	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary		User Sign In
+// @Description	API For User To Sign In
+// @Id				User SignIn
+// @Tags			Authentication
+// @Param			inputs	body	request.SignIn{}	true	"Sign In Details"
+// @Router			/auth/sign-in [post]
+// @Success		200	{object}	response.Response{data=response.SignIn}	"Successfully Sign In Completed"
+// @Failure		400	{object}	response.Response{}						"Invalid Inputs"
+// @Failure		401	{object}	response.Response{}						"User Not Exist With This Details"
+// @Failure		500	{object}	response.Response{}						"Internal Server Error"
 func (a *authHandler) SignIn(ctx *gin.Context) {
 
 	// create request body which have binding validation tags

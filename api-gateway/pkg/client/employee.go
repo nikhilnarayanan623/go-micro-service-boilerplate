@@ -56,9 +56,8 @@ func (e *employeeServiceClient) Create(ctx context.Context, empReq request.Emplo
 	var employees []response.Employee
 
 	for {
-		fmt.Println("receiving...")
+
 		res, err := stream.Recv()
-		fmt.Println("received: ", res, err)
 		if err != nil {
 			// check error is EOF
 			if err == io.EOF {
