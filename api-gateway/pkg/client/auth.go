@@ -77,6 +77,7 @@ func (a *authServiceClient) SignIn(ctx context.Context, signInDetails request.Si
 
 	return response.SignIn{
 		AccessToken: res.GetAccessToken(),
+		ExpireAt:    res.GetExpireAt().AsTime(),
 	}, nil
 }
 
@@ -95,10 +96,10 @@ func (a *authServiceClient) VerifyAccessToken(ctx context.Context, accessToken s
 	}
 
 	return models.TokenPayload{
-		TokenID: res.GetTokenId(),
-		UserID:  res.GetUserId(),
-		Email:   res.GetEmail(),
-		Role:    res.GetRole(),
-		// expire at
+		TokenID:  res.GetTokenId(),
+		UserID:   res.GetUserId(),
+		Email:    res.GetEmail(),
+		Role:     res.GetRole(),
+		ExpireAt: res.GetExpireAt().AsTime(),
 	}, nil
 }

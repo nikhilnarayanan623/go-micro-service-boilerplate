@@ -11,6 +11,7 @@ import (
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 const (
@@ -109,6 +110,7 @@ func (a *authServiceServer) SignIn(ctx context.Context, req *pb.SignInRequest) (
 
 	return &pb.SignInResponse{
 		AccessToken: tokenRes.AccessToken,
+		ExpireAt:    timestamppb.New(tokenRes.AccessTokenExpireAt),
 	}, nil
 
 }
@@ -139,9 +141,10 @@ func (a *authServiceServer) VerifyAccessToken(ctx context.Context, req *pb.Verif
 	}
 
 	return &pb.VerifyAccessTokenResponse{
-		TokenId: payload.TokenID,
-		UserId:  payload.UserID,
-		Email:   payload.Email,
-		Role:    payload.Role,
+		TokenId:  payload.TokenID,
+		UserId:   payload.UserID,
+		Email:    payload.Email,
+		Role:     payload.Role,
+		ExpireAt: timestamppb.New(payload.ExpireAt),
 	}, nil
 }

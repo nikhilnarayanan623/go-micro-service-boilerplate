@@ -51,7 +51,7 @@ To use this boilerplate, you need to have the following installed on your system
 ### Instructions
 
   #### 1. API Gateway
-  ##### 1. Install dependcies
+  ##### 1. Install dependencies
   ```bash
     ## Assuming you are in root of the project
     cd ./api-gateway && \
@@ -74,7 +74,7 @@ To use this boilerplate, you need to have the following installed on your system
     go run ./cmd/api
   ```
   #### 2. Auth Service
-  ##### 1. Install dependcies
+  ##### 1. Install dependencies
   ```bash
     ## Assuming you are in root of the project
     cd ./auth-service && \
@@ -93,13 +93,13 @@ To use this boilerplate, you need to have the following installed on your system
     DB_PASSWORD="database user password"
     ## JWT
     JWT_KEY="a key that you wan't to sign in for token"
-  ```
+  ```k
   ##### 3. Run Application
   ```bash
     go run ./cmd/api
   ```
   #### 3. Employee Service
-  ##### 1. Install dependcies
+  ##### 1. Install dependencies
   ```bash
     cd ./employee-service && \
     go mod tidy
