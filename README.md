@@ -93,7 +93,7 @@ To use this boilerplate, you need to have the following installed on your system
     DB_PASSWORD="database user password"
     ## JWT
     JWT_KEY="a key that you wan't to sign in for token"
-  ```k
+  ```
   ##### 3. Run Application
   ```bash
     go run ./cmd/api
