@@ -118,3 +118,24 @@ To use this boilerplate, you need to have the following installed on your system
 ## Usage
 ### 1. Live API Documentation
 If you are running the project then visit (http://localhost:{$API_PORT}/swagger/index.html)
+
+### 2. Explanation of Services
+##### 1. API Gateway:
+The API Gateway is the entry point for all external requests to your microservices. It acts as a central hub for routing requests to the appropriate microservice.
+It handles incoming HTTP requests and directs them to the relevant microservices based on the request path or other criteria.
+The API Gateway is responsible for distributing requests to various services, making it a crucial component for scaling and managing your microservices.
+It also provides a unified interface to clients, abstracting the underlying services and simplifying the API for consumers.
+To run the API Gateway, you need to set up the environment variables in its .env file, including the ports and host information for the Auth and Employee services. Then, you can start the gateway using go run ./cmd/api for checkout the Instructions.
+
+##### Auth Service:
+The Auth Service is responsible for handling user authentication and authorization. It ensures secure access to your microservices.
+It provides functionalities like user registration (sign up), user authentication (sign in), and generating JSON Web Tokens (JWT) for authorized users.
+The service uses a PostgreSQL database to store user information, and you need to configure database connection details in its .env file.
+The JWT_KEY in the .env file is used to sign and verify JWTs, which are crucial for secure communication and access control in your microservices.
+To run the Auth Service, you need to install its dependencies, set up the environment variables, and then start the service using go run ./cmd/api for more checkout the Instructions.
+
+##### Employee Service:
+The Employee Service is responsible for generating random employee details. It can be used as a sample service for testing and demonstration purposes.
+It can generate a specified number of random employee records on request, making it useful for simulating interactions with a database.
+The Employee Service has its environment variables defined in its .env file, specifying the host and port where it will run.
+To run the Employee Service, you need to install its dependencies, set up the environment variables, and then start the service using go run ./cmd/api for more checkout the Instructions.
